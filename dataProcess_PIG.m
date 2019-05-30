@@ -1,7 +1,7 @@
 clc;
 clear all;
 
-DATA=load('G:\INS_LOOSE\pull_test_01.csv');%鍔犺浇鏁版嵁
+DATA=load('C:\Users\LuoHongfu\Desktop\INS_LOOSE\pull_test_13.csv');%加载文件数据
 
 first_start=1;
 first_end=length(DATA(:,1));
@@ -59,18 +59,34 @@ for i=start_n:step_n:n
     tmp1=distance(i);
     dt=time(i)-tmp2;
     tmp2=time(i);
+    Ds(j+1)=Ds(j)+ds;
 %     Ds(j+1)=Ds(j)+ds;
     v(j)=(dv1+dv2+dv3+dv4)/4;
     vv(j)=ds/dt;
     j=j+1;
 end
-
+% deep=10;
+% buf_v=zeros(deep,1);
+% smooth_v=v;
+% for i=1:j-1
+%     for k=deep:-1:2
+%         buf_v(k)=buf_v(k-1);
+%     end
+%     buf_v(1)=v(i);
+%     smooth_v(i)=sum(buf_v)/deep;
+%     
+% end
 GPS(1,:) = [1:j-1]*delta_t;
 GPS(2,:) =  40.006403*pi/180;
 GPS(3,:) = 116.336532*pi/180;
 GPS(4,:) = 50.0;
-GPS(5,:) = v;
 
+% GPS(5,:) = smooth_v;
+GPS(5,:) = v;
+% GPS(6,:) = diff(Ds(1:end))/delta_t;
+% GPS(7,:) = smooth_v;
+GPS(6,:) = Ds(1:end-1);
+% GPS(7,:) = diff(Ds(1:end-1))*10;
 save('coreTurn.mat','MMQ','GPS')		
 
 

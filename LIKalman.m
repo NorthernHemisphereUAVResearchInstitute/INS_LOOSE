@@ -58,7 +58,17 @@ global S;
         LI.FI = F*LI.dt + eye(15,15);
         
         %速度观测矩阵、观测量
+%         zeta=(I.Wie+I.Wep-LI.dx(1:3))*LI.dt;
+%         Cn=[1,zeta(3)*0.5,-zeta(2)*0.5;...
+%             -zeta(3)*0.5,1,zeta(1)*0.5;...
+%             zeta(2)*0.5,-zeta(1)*0.5,1];
         Vned=I.Cnb*[GPS(5,LI.indexGPS);0;0];
+%         Vned(1)=Vned(1)*GPS(5,LI.indexGPS)/sqrt(Vned(1)*Vned(1)+Vned(2)*Vned(2)+Vned(3)*Vned(3));
+%         Vned(2)=Vned(2)*GPS(5,LI.indexGPS)/sqrt(Vned(1)*Vned(1)+Vned(2)*Vned(2)+Vned(3)*Vned(3));
+%         Vned(3)=Vned(3)*GPS(5,LI.indexGPS)/sqrt(Vned(1)*Vned(1)+Vned(2)*Vned(2)+Vned(3)*Vned(3));
+%         Vned(1)=0;
+%         Vned(2)=0;
+%         Vned(3)=0;
         LI.H = zeros(3,15);
         LI.H(1:3,4:6) = eye(3,3);
         
@@ -102,6 +112,8 @@ global S;
         I.Cen=[-sin(LI.latitude)*cos(LI.longitude), -sin(LI.latitude)*sin(LI.longitude),  cos(LI.latitude);
             -sin(LI.longitude),                cos(LI.longitude),                 0;
             -cos(LI.latitude)*cos(LI.longitude),  -cos(LI.latitude)*sin(LI.longitude),  -sin(LI.latitude)];
+        
+        LI.alllen=GPS(6,LI.indexGPS);
         %save data
         LI.save_dx(:,LI.indexGPS) = LI.dx;
         LI.save_Gyro_Offset(:,LI.indexGPS) =LI.Gyro_Offset;
